@@ -1,4 +1,4 @@
-📡# Sistema Distribuído com Sockets, Streams e Votação de Delivery
+#📡 Sistema Distribuído com Sockets, Streams e Votação de Delivery
 
 Este projeto implementa um sistema distribuído completo, desenvolvido para a disciplina de Sistemas Distribuídos, abordando conceitos fundamentais como:
 
