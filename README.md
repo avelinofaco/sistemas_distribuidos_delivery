@@ -1,171 +1,236 @@
-#📡 Sistema Distribuído com Sockets, Streams e Votação de Delivery
+# 📡 Sistema Distribuído com Sockets, Streams e Votação de Delivery
 
-Este projeto implementa um sistema distribuído completo, desenvolvido para a disciplina de Sistemas Distribuídos, abordando conceitos fundamentais como:
+---
 
-Comunicação via Sockets (TCP/UDP)
-Streams personalizados (InputStream/OutputStream)
-Serialização manual de dados
-Representação externa (JSON)
-Concorrência com multithreading
-🎯## Objetivo
+## 🚀 Visão Geral
 
-Desenvolver um sistema capaz de transmitir dados estruturados entre processos distribuídos, aplicando os conceitos teóricos em um cenário prático de votação e gerenciamento de pedidos.
+Este projeto apresenta a implementação de um **sistema distribuído completo**, desenvolvido para demonstrar na prática conceitos fundamentais de comunicação em rede, serialização de dados e concorrência.
 
-🧩 Parte 1 — Sockets e Streams
-✅### Questão 1 — Definição do Serviço Remoto
+A solução integra múltiplas tecnologias e paradigmas para simular um ambiente real de **votação de cardápio de delivery**, permitindo interação simultânea entre clientes e administradores.
 
-Foi desenvolvido um sistema de votação para cardápio de delivery, com interação entre eleitores e administradores.
+---
 
-📦 Classes POJO:
-Candidato → itens disponíveis para votação
-Voto → representa o voto do eleitor
-ComandoAdmin → ações administrativas
-Pedido → utilizado como base para manipulação de streams
-⚙️ Classes de Serviço:
-Gerenciamento de candidatos
-Processamento de votos
-Controle administrativo
-✅### Questão 2 — OutputStream Personalizado
+## 🎯 Objetivos
 
-Foi implementada a classe:
+- Implementar comunicação cliente-servidor via **Sockets (TCP/UDP)**
+- Criar **streams personalizados** para manipulação de dados binários
+- Aplicar **serialização manual** de objetos
+- Construir um sistema distribuído com **concorrência**
+- Simular um cenário real de aplicação (votação + pedidos)
 
-PedidoOutputStream extends OutputStream
-🔧 Responsabilidades:
-Enviar um conjunto de objetos Pedido como fluxo de bytes
-Realizar serialização manual
-📥 Parâmetros do construtor:
-Array de Pedido
-Quantidade de objetos
-Tamanho em bytes de pelo menos 3 atributos
-Um OutputStream de destino
-🧪 Testes realizados:
-✔️ System.out
-✔️ FileOutputStream
-✔️ Socket TCP
-✅### Questão 3 — InputStream Personalizado
+---
 
-🔧 Responsabilidades:
-Ler fluxo de bytes
-Reconstruir objetos Pedido (desserialização manual)
-📥 Parâmetro do construtor:
-Um InputStream de origem
-🧪 Testes realizados:
-✔️ System.in
-✔️ FileInputStream
-✔️ Socket TCP
-🔄 Parte 2 — Serialização
-✅### Questão 4 — Comunicação Cliente-Servidor com Pedido
+## 🧩 Arquitetura do Sistema
 
-Foi implementado um serviço remoto utilizando Sockets TCP, com troca de dados baseada na classe Pedido.
+O sistema foi dividido em três grandes módulos:
 
-🔌 Comunicação:
-Cliente ↔ Servidor via TCP
-Troca de dados em formato de bytes
-🔁 Fluxo de execução:
+### 🔹 1. Sockets e Streams
+Manipulação de dados em baixo nível utilizando `InputStream` e `OutputStream`.
 
-Cliente:
+### 🔹 2. Serialização
+Empacotamento e transmissão de objetos (`Pedido`) via rede.
 
-Serializa objeto Pedido
-Empacota requisição
-Envia ao servidor
-Recebe resposta
-Desserializa
+### 🔹 3. Sistema Distribuído de Votação
+Aplicação prática utilizando TCP + UDP + Multithreading.
 
-Servidor:
+---
 
-Recebe requisição
-Desserializa objeto Pedido
-Processa lógica
-Serializa resposta
-Envia ao cliente
-🛠️ Protocolo de Comunicação
+## 🧱 Modelagem de Dados (POJO)
 
-Para garantir integridade dos dados:
+As seguintes classes foram utilizadas:
 
-Header (4 bytes): tamanho da mensagem
-Payload: dados serializados
-📦 Serialização
-Implementação manual (byte a byte)
-Controle total sobre envio e leitura dos dados
-Baseada na classe Pedido
-🌐## Parte 3 — Representação Externa de Dados
-✅### Questão 5 — Sistema de Votação Distribuído
+- `Candidato` → itens disponíveis para votação  
+- `Voto` → representa o voto do usuário  
+- `ComandoAdmin` → ações administrativas  
+- `Pedido` → base para serialização e streams  
 
-Foi desenvolvido um sistema completo de votação com comunicação híbrida.
+---
 
-🗳️## Funcionalidades
+## 🔄 Streams Personalizados
 
-👤### Eleitor:
-Login no sistema
-Recebe lista de candidatos
-Realiza votação
+### 📤 PedidoOutputStream
 
-👨‍💼### Administrador:
-Adiciona candidatos
-Remove candidatos
-Envia avisos informativos
+Classe responsável por **serializar e enviar objetos `Pedido`** como fluxo de bytes.
 
-⏱️### Controle de Votação
-Tempo limite definido pelo servidor
-Após o prazo:
-Bloqueio de novos votos
-Apuração automática
-Definição do vencedor
+**Funcionalidades:**
+- Serialização manual de atributos
+- Controle do tamanho dos dados enviados
+- Suporte a múltiplos destinos
 
-📊 ### Processamento de Resultados
-Total de votos por candidato
-Percentual de votos
-Identificação do vencedor
+**Testes realizados:**
+- Saída padrão (`System.out`)
+- Arquivo (`FileOutputStream`)
+- Socket TCP
 
-🏗️ ### Arquitetura de Comunicação
-🔌 TCP (Unicast)
-Login
-Envio de votos
-Lista de candidatos
+---
 
-📡 UDP (Multicast)
-Envio de avisos administrativos
-Grupo multicast: 224.1.1.1
+### 📥 PedidoInputStream
 
-🧵 Concorrência
-Servidor multi-threaded
-Uma thread por cliente
-Suporte a múltiplas conexões simultâneas
+Classe responsável por **ler e reconstruir objetos `Pedido`**.
 
-🛠️ Representação de Dados
-Utilização de JSON
-(alternativa ao Protocol Buffers sugerido na atividade)
+**Funcionalidades:**
+- Leitura de bytes
+- Desserialização manual
+- Reconstrução de objetos
 
-📢 ### Sistema de Notificações
-Envio via multicast
-Clientes recebem automaticamente
-Comunicação eficiente e escalável
+**Testes realizados:**
+- Entrada padrão (`System.in`)
+- Arquivo (`FileInputStream`)
+- Socket TCP
 
-🧪 ###  Tecnologias Utilizadas
-Java → Streams personalizados e serialização (Pedido)
-Python → Sockets, Threads e JSON
-TCP/UDP
-Multithreading
+---
 
-📌 ### Resultados
+## 🔌 Comunicação Cliente-Servidor
 
-✔️ Implementação completa das 5 questões
-✔️ Uso correto de Pedido nas questões 2, 3 e 4
-✔️ Comunicação cliente-servidor funcional
-✔️ Streams personalizados operando corretamente
-✔️ Sistema de votação distribuído robusto
-✔️ Integração eficiente entre TCP e UDP
+### 🧠 Baseada na classe `Pedido` (Questão 4)
 
-💡 ### Melhorias Futuras
-Interface gráfica (Web/Desktop)
-Persistência em banco de dados
-Criptografia de dados
-Implementação com Protocol Buffers
-📚 ### Conclusão
+A comunicação foi implementada utilizando **Sockets TCP**, com troca de dados em formato binário.
 
-O projeto demonstra, de forma prática, a aplicação de conceitos fundamentais de:
+### 🔁 Fluxo
 
-Sistemas distribuídos
-Comunicação em rede
-Serialização de dados
-Concorrência
+**Cliente:**
+- Serializa `Pedido`
+- Envia requisição
+- Recebe resposta
+- Desserializa dados
+
+**Servidor:**
+- Recebe requisição
+- Desserializa
+- Processa
+- Serializa resposta
+- Envia ao cliente
+
+---
+
+## 🛠️ Protocolo de Comunicação
+
+Para garantir robustez:
+
+- **Header (4 bytes)** → tamanho da mensagem  
+- **Payload** → dados serializados  
+
+---
+
+## 🌐 Sistema de Votação Distribuído
+
+### 🗳️ Funcionalidades
+
+#### 👤 Eleitor
+- Login no sistema  
+- Visualização de candidatos  
+- Votação  
+
+#### 👨‍💼 Administrador
+- Gerenciamento de candidatos  
+- Envio de notificações  
+- Controle do sistema  
+
+---
+
+### ⏱️ Controle de Votação
+
+- Tempo limite definido pelo servidor  
+- Encerramento automático  
+- Apuração dos resultados  
+
+---
+
+### 📊 Resultados
+
+- Total de votos por candidato  
+- Percentual de votos  
+- Identificação do vencedor  
+
+---
+
+## 🏗️ Arquitetura de Comunicação
+
+### 🔌 TCP (Unicast)
+- Login  
+- Votação  
+- Lista de candidatos  
+
+### 📡 UDP (Multicast)
+- Notificações em tempo real  
+- Grupo: `224.1.1.1`  
+
+---
+
+## 🧵 Concorrência
+
+- Servidor multi-threaded  
+- Uma thread por cliente  
+- Processamento simultâneo de múltiplos usuários  
+
+---
+
+## 🛠️ Representação de Dados
+
+- Utilização de **JSON**
+- Alternativa ao Protocol Buffers
+- Fácil leitura e extensibilidade
+
+---
+
+## 🧪 Tecnologias Utilizadas
+
+| Tecnologia | Finalidade |
+|----------|--------|
+| Java | Streams e serialização (`Pedido`) |
+| Python | Comunicação via sockets |
+| TCP | Comunicação confiável |
+| UDP | Comunicação multicast |
+| Threads | Concorrência |
+
+---
+
+## 📌 Resultados Alcançados
+
+- ✔️ Implementação completa das 5 questões  
+- ✔️ Streams personalizados funcionais  
+- ✔️ Serialização manual eficiente  
+- ✔️ Comunicação distribuída robusta  
+- ✔️ Integração TCP + UDP  
+- ✔️ Sistema escalável e concorrente  
+
+---
+
+## 💡 Melhorias Futuras
+
+- Interface Web (React ou Flask)
+- Persistência com banco de dados
+- Autenticação de usuários
+- Criptografia de comunicação
+- Uso de Protocol Buffers ou gRPC
+
+---
+
+## 📚 Aprendizados
+
+Este projeto consolidou conhecimentos em:
+
+- Sistemas distribuídos  
+- Comunicação em rede  
+- Serialização de dados  
+- Programação concorrente  
+- Arquitetura de software  
+
+---
+
+## 👨‍💻 Autor
+
+Desenvolvido por **Avelino Facó**  
+📍 Ceará - Brasil  
+
+---
+
+## ⭐ Destaque
+
+Projeto ideal para demonstrar domínio em:
+
+- Backend distribuído  
+- Redes de computadores  
+- Engenharia de software  
+
+---
