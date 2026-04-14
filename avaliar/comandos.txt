@@ -1,0 +1,10 @@
+para rodar eleitor:
+python avaliar/eleitor.py
+
+para rodar admin:
+python avaliar/admin_multicast.py
+
+
+
+
+Nota do admin pra teste: "Votou no prato vencedor? Você ganhará um cupom de 20% no final da votação!"
