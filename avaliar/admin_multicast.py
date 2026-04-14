@@ -3,6 +3,11 @@ import json
 import sys
 import os
 
+SERVER_HOST = "10.10.244.29"
+SERVER_PORT = 12345
+MULTICAST_GROUP = "224.1.1.1"
+MULTICAST_PORT = 5007
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from models.votacao import NotaInformativa, ComandoAdmin
 
@@ -14,7 +19,7 @@ def gerenciar_candidatos():
 
     try:
         cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        cliente.connect(('localhost', 12345))
+        cliente.connect((MULTICAST_GROUP, SERVER_PORT))
 
         if op == '1':
             id_c = int(input("ID: "))
@@ -52,7 +57,7 @@ def enviar_multicast():
     
     msg = input("Digite a nota para o grupo Multicast: ")
     nota = NotaInformativa("Gerente Avelino", msg)
-    sock.sendto(json.dumps(nota.to_dict()).encode('utf-8'), ('224.1.1.1', 5007))
+    sock.sendto(json.dumps(nota.to_dict()).encode('utf-8'), (MULTICAST_GROUP, MULTICAST_PORT))
     print("📡 Aviso enviado!")
 
 if __name__ == "__main__":
