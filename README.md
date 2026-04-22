@@ -1,20 +1,25 @@
 # 📡 Sistema Distribuído com Sockets, Streams e Votação de Delivery
 
+![Python](https://img.shields.io/badge/Python-Sockets-blue)
+![Protocol](https://img.shields.io/badge/Protocol-TCP%2FUDP-green)
+![Architecture](https://img.shields.io/badge/Architecture-Distributed-black)
+![Status](https://img.shields.io/badge/Status-Completed-brightgreen)
+
 ---
 
 ## 🚀 Visão Geral
 
-Este projeto apresenta a implementação de um **sistema distribuído completo**, desenvolvido para demonstrar na prática conceitos fundamentais de comunicação em rede, serialização de dados e concorrência.
+Este projeto apresenta a implementação de um **sistema distribuído completo em Python**, desenvolvido para demonstrar na prática conceitos fundamentais de comunicação em rede, serialização de dados e concorrência.
 
-A solução integra múltiplas tecnologias e paradigmas para simular um ambiente real de **votação de cardápio de delivery**, permitindo interação simultânea entre clientes e administradores.
+A solução simula um ambiente real de **votação de cardápio de delivery**, permitindo interação simultânea entre clientes e administradores.
 
 ---
 
 ## 🎯 Objetivos
 
 - Implementar comunicação cliente-servidor via **Sockets (TCP/UDP)**
-- Criar **streams personalizados** para manipulação de dados binários
-- Aplicar **serialização manual** de objetos
+- Criar mecanismos de envio e leitura de dados (streams)
+- Aplicar **serialização manual de objetos**
 - Construir um sistema distribuído com **concorrência**
 - Simular um cenário real de aplicação (votação + pedidos)
 
@@ -22,10 +27,10 @@ A solução integra múltiplas tecnologias e paradigmas para simular um ambiente
 
 ## 🧩 Arquitetura do Sistema
 
-O sistema foi dividido em três grandes módulos:
+O sistema foi dividido em três módulos principais:
 
 ### 🔹 1. Sockets e Streams
-Manipulação de dados em baixo nível utilizando `InputStream` e `OutputStream`.
+Manipulação de dados em baixo nível utilizando envio e leitura de bytes.
 
 ### 🔹 2. Serialização
 Empacotamento e transmissão de objetos (`Pedido`) via rede.
@@ -35,54 +40,54 @@ Aplicação prática utilizando TCP + UDP + Multithreading.
 
 ---
 
-## 🧱 Modelagem de Dados (POJO)
+## 🧱 Modelagem de Dados
 
 As seguintes classes foram utilizadas:
 
+- `Pedido` → base para serialização e comunicação  
 - `Candidato` → itens disponíveis para votação  
 - `Voto` → representa o voto do usuário  
 - `ComandoAdmin` → ações administrativas  
-- `Pedido` → base para serialização e streams  
 
 ---
 
-## 🔄 Streams Personalizados
+## 🔄 Manipulação de Streams (Python)
 
-### 📤 PedidoOutputStream
+Embora Python não utilize diretamente `InputStream/OutputStream` como Java, o projeto implementa o mesmo conceito através de:
 
-Classe responsável por **serializar e enviar objetos `Pedido`** como fluxo de bytes.
+### 📤 Envio de Dados (`PedidoOutputStream`)
 
-**Funcionalidades:**
-- Serialização manual de atributos
-- Controle do tamanho dos dados enviados
-- Suporte a múltiplos destinos
+Responsável por:
+
+- Serializar objetos `Pedido` manualmente
+- Converter dados para bytes
+- Enviar via diferentes destinos
 
 **Testes realizados:**
-- Saída padrão (`System.out`)
-- Arquivo (`FileOutputStream`)
+- Saída padrão (`print`)
+- Arquivo (`open(..., 'wb')`)
 - Socket TCP
 
 ---
 
-### 📥 PedidoInputStream
+### 📥 Leitura de Dados (`PedidoInputStream`)
 
-Classe responsável por **ler e reconstruir objetos `Pedido`**.
+Responsável por:
 
-**Funcionalidades:**
-- Leitura de bytes
-- Desserialização manual
-- Reconstrução de objetos
+- Ler bytes de diferentes fontes
+- Desserializar dados
+- Reconstruir objetos `Pedido`
 
 **Testes realizados:**
-- Entrada padrão (`System.in`)
-- Arquivo (`FileInputStream`)
+- Entrada padrão
+- Arquivo (`open(..., 'rb')`)
 - Socket TCP
 
 ---
 
 ## 🔌 Comunicação Cliente-Servidor
 
-### 🧠 Baseada na classe `Pedido` (Questão 4)
+### 🧠 Baseada na classe `Pedido`
 
 A comunicação foi implementada utilizando **Sockets TCP**, com troca de dados em formato binário.
 
@@ -105,10 +110,10 @@ A comunicação foi implementada utilizando **Sockets TCP**, com troca de dados 
 
 ## 🛠️ Protocolo de Comunicação
 
-Para garantir robustez:
+Para garantir robustez e evitar erros de transmissão:
 
 - **Header (4 bytes)** → tamanho da mensagem  
-- **Payload** → dados serializados  
+- **Payload** → dados serializados (JSON/binário)  
 
 ---
 
@@ -159,16 +164,15 @@ Para garantir robustez:
 
 ## 🧵 Concorrência
 
-- Servidor multi-threaded  
+- Servidor multi-threaded (`threading`)
 - Uma thread por cliente  
-- Processamento simultâneo de múltiplos usuários  
+- Processamento simultâneo  
 
 ---
 
 ## 🛠️ Representação de Dados
 
 - Utilização de **JSON**
-- Alternativa ao Protocol Buffers
 - Fácil leitura e extensibilidade
 
 ---
@@ -177,32 +181,30 @@ Para garantir robustez:
 
 | Tecnologia | Finalidade |
 |----------|--------|
-| Java | Streams e serialização (`Pedido`) |
-| Python | Comunicação via sockets |
-| TCP | Comunicação confiável |
-| UDP | Comunicação multicast |
-| Threads | Concorrência |
+| Python | Implementação geral |
+| Socket (TCP/UDP) | Comunicação em rede |
+| JSON | Serialização |
+| Threading | Concorrência |
 
 ---
 
 ## 📌 Resultados Alcançados
 
 - ✔️ Implementação completa das 5 questões  
-- ✔️ Streams personalizados funcionais  
+- ✔️ Comunicação distribuída funcional  
 - ✔️ Serialização manual eficiente  
-- ✔️ Comunicação distribuída robusta  
+- ✔️ Sistema concorrente robusto  
 - ✔️ Integração TCP + UDP  
-- ✔️ Sistema escalável e concorrente  
 
 ---
 
 ## 💡 Melhorias Futuras
 
-- Interface Web (React ou Flask)
+- Interface Web (Flask ou Django)
 - Persistência com banco de dados
 - Autenticação de usuários
 - Criptografia de comunicação
-- Uso de Protocol Buffers ou gRPC
+- Uso de gRPC ou Protocol Buffers
 
 ---
 
@@ -214,14 +216,12 @@ Este projeto consolidou conhecimentos em:
 - Comunicação em rede  
 - Serialização de dados  
 - Programação concorrente  
-- Arquitetura de software  
 
 ---
 
 ## 👨‍💻 Autor
 
-Desenvolvido por **Avelino Facó**  
-📍 Ceará - Brasil  
+Desenvolvido por **Avelino Facó** 
 
 ---
 
@@ -232,5 +232,3 @@ Projeto ideal para demonstrar domínio em:
 - Backend distribuído  
 - Redes de computadores  
 - Engenharia de software  
-
----
