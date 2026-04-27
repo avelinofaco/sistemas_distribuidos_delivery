@@ -5,12 +5,17 @@ import struct
 import sys
 import os
 
+SERVER_HOST = "10.10.244.29"
+SERVER_PORT = 12345
+MULTICAST_GROUP = "224.1.1.1"
+MULTICAST_PORT = 5007
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from models.votacao import Candidato, Voto, NotaInformativa
 
 def escutar_multicast():
-    group = '224.1.1.1'
-    port = 5007
+    group = MULTICAST_GROUP
+    port = MULTICAST_PORT
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sock.bind(('', port))
@@ -44,7 +49,7 @@ def realizar_votacao():
 
     try:
         cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        cliente.connect(('localhost', 12345))
+        cliente.connect((SERVER_HOST, SERVER_PORT))
         
         # 1. O servidor agora espera um JSON para diferenciar Admin de Eleitor
         pacote_login = json.dumps({"login": login})
